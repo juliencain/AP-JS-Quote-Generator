@@ -1,4 +1,4 @@
-const api = 'http://quotes.rest/quote/random.json?api_key=<34bLfTWYKqOsmmm8kgsJsl7SprnewYpq5VHmopp66bbaf771>';
+const api = 'http://quotes.rest/quote/random.json?api_key=34bLfTWYKqOsmmm8kgsJsl7SprnewYpq5VHmopp66bbaf771';
 
 const getQuote = () =>
   new Promise((resolve, reject) => {
