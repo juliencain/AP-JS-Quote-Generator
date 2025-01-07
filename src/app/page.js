@@ -2,52 +2,45 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import getQuote from '@/api/Quote';
+import getQuote from '../api/Quote';
 
 function Home() {
-  const [quote, setQuote] = useState('');
+  const [, setQuote] = useState('');
   const [quoteText, setQuoteText] = useState('');
-  const [buttonText, setButtonText] = useState('Get a Quote');
-  const [buttonColor, setButtonColor] = useState('red');
+  const [quoteAuthor, setQuoteAuthor] = useState('');
+  const [quoteButtonText, setQuoteButtonText] = useState('Get a Quote');
 
   useEffect(() => {
-    const fetchInitialQuote = async () => {
+    const fetchQuote = async () => {
       try {
         const data = await getQuote();
-        setQuote(data);
-        setQuoteText(data.quote);
-        setButtonText('See Who Said This');
-        setButtonColor('green');
+        const newQuote = data.quotes[0];
+
+        setQuote(newQuote);
+        setQuoteText(newQuote.quote);
+        setQuoteAuthor(newQuote.author);
       } catch (error) {
         console.error('Error fetching quote:', error);
-        setQuoteText('Failed to load quote.');
-        setButtonText('Try Again');
-        setButtonColor('red');
+        setQuoteText('Failed to load quote');
       }
     };
 
-    fetchInitialQuote();
+    fetchQuote();
   }, []);
 
   const handleClick = () => {
-    if (buttonText === 'Get a Quote' || buttonText === 'Get Another Quote') {
+    if (quoteButtonText === 'Get a Quote' || quoteButtonText === 'Get another Quote') {
       getQuote().then((data) => {
-        setQuote(data);
-        setQuoteText(data.quote);
-        setButtonText('See Who Said This');
-        setButtonColor('green');
+        const newQuote = data.quotes[0];
+        setQuote(newQuote);
+        setQuoteText(newQuote.quote);
+        setQuoteAuthor(newQuote.author);
+        setQuoteButtonText('See Who Said This');
       });
-    } else if (buttonText === 'See Who Said This') {
-      setQuoteText(`${quote.quote} — ${quote.author}`);
-      setButtonText('another quote please');
-      setButtonColor('yellow');
+    } else if (quoteButtonText === 'See Who Said This') {
+      setQuoteText(`${quoteText} — ${quoteAuthor}`);
+      setQuoteButtonText('Get another Quote');
     }
-  };
-
-  const handleClear = () => {
-    setQuoteText('');
-    setButtonText('Get a Quote');
-    setButtonColor('red');
   };
 
   return (
@@ -60,13 +53,12 @@ function Home() {
         margin: '0 auto',
       }}
     >
-      {/* This is where the quote text is displayed */}
+      {/* Display the quote text */}
       <div>{quoteText}</div>
-      <Button style={{ backgroundColor: buttonColor, marginTop: '15px' }} onClick={handleClick}>
-        {buttonText}
-      </Button>
-      <Button style={{ marginTop: '15px' }} onClick={handleClear}>
-        clear
+
+      {/* Button with dynamic text */}
+      <Button style={{ marginTop: '15px' }} onClick={handleClick}>
+        {quoteButtonText}
       </Button>
     </div>
   );

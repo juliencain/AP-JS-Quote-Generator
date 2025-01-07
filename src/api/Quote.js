@@ -1,8 +1,8 @@
-const api = 'http://quotes.rest/quote/random.json?api_key=34bLfTWYKqOsmmm8kgsJsl7SprnewYpq5VHmopp66bbaf771';
+const endpoint = 'https://dummyjson.com/quotes';
 
 const getQuote = () =>
   new Promise((resolve, reject) => {
-    fetch(`${api}`, {
+    fetch(`${endpoint}`, {
       method: 'GET',
       headers: {
         'content-Type': 'application/json',
